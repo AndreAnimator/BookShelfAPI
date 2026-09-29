@@ -1,0 +1,23 @@
+services:
+  mysql:
+    image: mysql:8.4
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "--protocol=tcp"]
+      interval: 5s
+      retries: 10
+
+  php:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
+
+volumes:
+  mysql_data:
