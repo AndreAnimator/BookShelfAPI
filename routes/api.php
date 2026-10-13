@@ -10,3 +10,7 @@ Route::get('/user', function (Request $request) {
 Route::get('ping', function () {
     return response()->json(['message' => 'pong']);
 });
+
+Route::get('ping', function () {
+    return response()->json(['message' => 'pong']);
+});
