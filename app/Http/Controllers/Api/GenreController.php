@@ -10,7 +10,6 @@ use App\Services\GenreService;
 
 class GenreController extends Controller
 {
-
     public function __construct(
         private GenreService $genreService
     ) {}

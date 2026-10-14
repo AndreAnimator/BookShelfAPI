@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\StoreBookRequest;
 use App\Http\Requests\UpdateBookRequest;
 use App\Http\Resources\BookResource;
 use App\Services\BookService;
@@ -13,6 +12,7 @@ class BookController extends Controller
     public function __construct(
         private BookService $bookService
     ) {}
+
     /**
      * Display a listing of the resource.
      */
@@ -44,7 +44,7 @@ class BookController extends Controller
      */
     public function update(UpdateBookRequest $request, int $id)
     {
-         $book = $this->bookService->update($id, $request->validated());
+        $book = $this->bookService->update($id, $request->validated());
 
         return new BookResource($book);
     }

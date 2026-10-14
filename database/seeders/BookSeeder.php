@@ -39,12 +39,12 @@ class BookSeeder extends Seeder
 
         foreach ($books as $book) {
             Book::create([
-                'genre_id'   => $genreIds[$book['genre']],
-                'title'      => $book['title'],
-                'author'     => $book['author'],
-                'pages'      => $book['pages'],
-                'status'     => $book['status'],
-                'rating'     => $book['rating'],
+                'genre_id' => $genreIds[$book['genre']],
+                'title' => $book['title'],
+                'author' => $book['author'],
+                'pages' => $book['pages'],
+                'status' => $book['status'],
+                'rating' => $book['rating'],
             ]);
         }
     }
