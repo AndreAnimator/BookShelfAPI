@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreGenreRequest;
+use App\Http\Requests\UpdateGenreRequest;
+use App\Http\Resources\GenreResource;
 use App\Services\GenreService;
-use Illuminate\Http\Request;
 
 class GenreController extends Controller
 {
@@ -18,17 +20,17 @@ class GenreController extends Controller
      */
     public function index()
     {
-        return response()->json($this->genreService->listAll());
+        return GenreResource::collection($this->genreService->listAll());
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreGenreRequest $request)
     {
-        $genre = $this->genreService->create($request->all());
+        $genre = $this->genreService->create($request->validated());
 
-        return response()->json($genre, 201);
+        return new GenreResource($genre);
     }
 
     /**
@@ -36,17 +38,17 @@ class GenreController extends Controller
      */
     public function show(int $id)
     {
-        return response()->json($this->genreService->findById($id));
+        return new GenreResource($this->genreService->findById($id));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, int $id)
+    public function update(UpdateGenreRequest $request, int $id)
     {
-        $genre = $this->genreService->update($id, $request->all());
+        $genre = $this->genreService->update($id, $request->validated());
 
-        return response()->json($genre);
+        return new GenreResource($genre);
     }
 
     /**
