@@ -13,8 +13,9 @@ WORKDIR /app
 COPY . .
 
 # no dev dependencies (phpunit etc.) and an optimized class map
-RUN composer install --no-dev --optimize-autoloader
+RUN composer install --no-dev --optimize-autoloader \
+    && composer check-platform-reqs --no-dev
 
 EXPOSE 8000
 
-CMD ["php", "artisan", "serve", "--host=0.0.0.0"]   
+CMD ["php", "artisan", "serve", "--host=0.0.0.0"]

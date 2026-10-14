@@ -19,10 +19,19 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.dev
+    depends_on:
+      mysql:
+        condition: service_healthy
     ports:
       - "8000:8000"
     volumes:
       - .:/app
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://127.0.0.1:8000/up"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+      start_period: 30s
 
 volumes:
   mysql_data:

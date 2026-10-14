@@ -11,8 +11,12 @@ WORKDIR /app
 
 COPY . .
 
-RUN composer install
+# validate the lock file and include development dependencies
+RUN composer validate --no-check-publish \
+    && composer install --no-interaction --prefer-dist \
+    && composer check-platform-reqs
 
 EXPOSE 8000
 
-CMD ["php", "artisan", "serve", "--host=0.0.0.0"]
+# the project bind mount is available only when the container starts
+CMD ["sh", "-c", "composer validate --no-check-publish && composer install --no-interaction --prefer-dist && composer check-platform-reqs && exec php artisan serve --host=0.0.0.0"]
