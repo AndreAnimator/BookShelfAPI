@@ -3,17 +3,22 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\Genre;
+use App\Services\GenreService;
 use Illuminate\Http\Request;
 
 class GenreController extends Controller
 {
+
+    public function __construct(
+        private GenreService $genreService
+    ) {}
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        return response()->json(Genre::all());
+        return response()->json($this->genreService->listAll());
     }
 
     /**
@@ -21,7 +26,7 @@ class GenreController extends Controller
      */
     public function store(Request $request)
     {
-        $genre = Genre::create($request->all());
+        $genre = $this->genreService->create($request->all());
 
         return response()->json($genre, 201);
     }
@@ -31,7 +36,7 @@ class GenreController extends Controller
      */
     public function show(int $id)
     {
-        return response()->json(Genre::findOrFail($id));
+        return response()->json($this->genreService->findById($id));
     }
 
     /**
@@ -39,8 +44,7 @@ class GenreController extends Controller
      */
     public function update(Request $request, int $id)
     {
-        $genre = Genre::findOrFail($id);
-        $genre->update($request->all());
+        $genre = $this->genreService->update($id, $request->all());
 
         return response()->json($genre);
     }
@@ -50,7 +54,7 @@ class GenreController extends Controller
      */
     public function destroy(int $id)
     {
-        Genre::findOrFail($id)->delete();
+        $this->genreService->delete($id);
 
         return response()->noContent();
     }

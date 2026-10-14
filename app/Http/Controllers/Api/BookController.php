@@ -3,17 +3,20 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\Book;
+use App\Services\BookService;
 use Illuminate\Http\Request;
 
 class BookController extends Controller
 {
+    public function __construct(
+        private BookService $bookService
+    ) {}
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        return response()->json(Book::all());
+        return response()->json($this->bookService->listAll());
     }
 
     /**
@@ -21,7 +24,7 @@ class BookController extends Controller
      */
     public function store(Request $request)
     {
-        $book = Book::create($request->all());
+        $book = $this->bookService->create($request->all());
 
         return response()->json($book, 201);
     }
@@ -31,7 +34,7 @@ class BookController extends Controller
      */
     public function show(int $id)
     {
-        return response()->json(Book::findOrFail($id));
+        return response()->json($this->bookService->findById($id));
     }
 
     /**
@@ -39,8 +42,7 @@ class BookController extends Controller
      */
     public function update(Request $request, int $id)
     {
-        $book = Book::findOrFail($id);
-        $book->update($request->all());
+        $book = $this->bookService->update($id, $request->all());
 
         return response()->json($book);
     }
@@ -50,7 +52,7 @@ class BookController extends Controller
      */
     public function destroy(int $id)
     {
-        Book::findOrFail($id)->delete();
+        $this->bookService->delete($id);
 
         return response()->noContent();
     }
