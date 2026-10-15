@@ -14,10 +14,16 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('me', [AuthController::class, 'me']);
     Route::post('logout', [AuthController::class, 'logout']);
     Route::post('logout-all', [AuthController::class, 'logoutAll']);
-    
+
     Route::apiResource('genres', GenreController::class)
         ->whereNumber('genre');
 
     Route::apiResource('books', BookController::class)
+        ->except('destroy')
         ->whereNumber('book');
+
+    // deleting a book demands a token that was explicitly allowed to do it
+    Route::delete('books/{id}', [BookController::class, 'destroy'])
+        ->middleware('abilities:books:delete')
+        ->whereNumber('id');
 });
