@@ -7,6 +7,7 @@ use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
 use App\Http\Resources\UserResource;
 use App\Services\AuthService;
+use Illuminate\Http\Request;
 
 class AuthController extends Controller
 {
@@ -34,5 +35,24 @@ class AuthController extends Controller
             'token'      => $result['token'],
             'token_type' => 'Bearer',
         ]);
+    }
+
+    public function me(Request $request)
+    {
+        return new UserResource($request->user());
+    }
+
+    public function logout(Request $request)
+    {
+        $this->authService->logout($request->user());
+
+        return response()->noContent();
+    }
+
+    public function logoutAll(Request $request)
+    {
+        $this->authService->logoutFromAllDevices($request->user());
+
+        return response()->noContent();
     }
 }

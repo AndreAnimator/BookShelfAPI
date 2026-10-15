@@ -41,4 +41,16 @@ class AuthService
     {
         return $user->createToken('api-token');
     }
+
+    public function logout(User $user): void
+    {
+        // revokes only the token used in the current request
+        $user->currentAccessToken()->delete();
+    }
+
+    public function logoutFromAllDevices(User $user): void
+    {
+        // revokes every token this user owns
+        $user->tokens()->delete();
+    }
 }
