@@ -23,6 +23,7 @@ class AuthController extends Controller
             'user'       => new UserResource($result['user']),
             'token'      => $result['token'],
             'token_type' => 'Bearer',
+            'expires_at' => $result['expires_at'],
         ], 201);
     }
 
@@ -34,6 +35,7 @@ class AuthController extends Controller
             'user'       => new UserResource($result['user']),
             'token'      => $result['token'],
             'token_type' => 'Bearer',
+            'expires_at' => $result['expires_at'],
         ]);
     }
 

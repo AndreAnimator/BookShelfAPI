@@ -17,6 +17,7 @@ class AuthService
         return [
             'user'  => $user,
             'token' => $token->plainTextToken,
+            'expires_at' => $token->accessToken->expires_at,
         ];
     }
 
@@ -34,12 +35,20 @@ class AuthService
         return [
             'user'  => $user,
             'token' => $token->plainTextToken,
+            'expires_at' => $token->accessToken->expires_at,
         ];
     }
 
     private function issueToken(User $user): NewAccessToken
     {
-        return $user->createToken('api-token');
+        $minutes = config('sanctum.expiration');
+
+        // null expiration means "no clock at all" — keep the column null in that case
+        return $user->createToken(
+            'api-token',
+            ['*'],
+            $minutes ? now()->addMinutes($minutes) : null,
+        );
     }
 
     public function logout(User $user): void
